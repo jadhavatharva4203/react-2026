@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import Counter from "./components/Counter";
 import PostList from "./components/PostList";
 import Timer from "./components/Timer";
+import SearchBar from "./components/SearchBar";
 
 export default function App() {
   const [count, setCount] = useState(1);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [query, setQuery] = useState("");
+
 
   useEffect(() => {
     const controller = new AbortController();
@@ -37,6 +40,10 @@ export default function App() {
     return () => controller.abort();
   }, [count]);
 
+  const filteredPosts = posts.filter(post =>
+    post.title.toLowerCase().includes(query.toLowerCase())
+  );
+
   return (
     <div>
       <h1>Day 5 Refactor</h1>
@@ -50,7 +57,8 @@ export default function App() {
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
 
-      <PostList posts={posts} />
+      <SearchBar query={query} onQueryChange={setQuery} />
+      <PostList posts={filteredPosts} />
 
       <Timer />
     </div>
