@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import Counter from "./components/Counter";
-import PostList from "./components/PostList";
-import Timer from "./components/Timer";
-import SearchBar from "./components/SearchBar";
+import { Routes, Route } from "react-router-dom";
+
+import Nav from "./components/Nav";
+import Home from "./pages/Home";
+import PostsPage from "./pages/PostsPage";
+import TimerPage from "./pages/TimerPage";
 
 export default function App() {
   const [count, setCount] = useState(1);
@@ -46,21 +48,27 @@ export default function App() {
 
   return (
     <div>
-      <h1>Day 5 Refactor</h1>
+      <Nav/>
 
-      <Counter
-        count={count}
-        onIncrement={() => setCount(c => c + 1)}
-        onDecrement={() => setCount(c => c - 1)}
-      />
-
-      {loading && <p>Loading...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
-      <SearchBar query={query} onQueryChange={setQuery} />
-      <PostList posts={filteredPosts} />
-
-      <Timer />
+      <Routes>
+        <Route path="/" element={<Home/>}></Route>
+        <Route
+          path="/posts"
+          element={
+            <PostsPage
+              count={count}
+              onIncrement={() => setCount(c => c + 1)}
+              onDecrement={() => setCount(c => c - 1)}
+              query={query}
+              onQueryChange={setQuery}
+              loading={loading}
+              error={error}
+              posts={filteredPosts}
+            />
+          }
+        />
+        <Route path="/timer" element={<TimerPage/>}/>
+      </Routes>
     </div>
   );
 }
