@@ -13,7 +13,6 @@ export default function App() {
   const [error, setError] = useState(null);
   const [query, setQuery] = useState("");
 
-
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
@@ -46,6 +45,15 @@ export default function App() {
     post.title.toLowerCase().includes(query.toLowerCase())
   );
 
+  function handleAddPost(title) {
+    const newPost = {
+      id: Date.now(),   // simple unique id
+      title,
+    };
+    setPosts(prev => [newPost, ...prev]);
+  }
+  
+
   return (
     <div>
       <Nav/>
@@ -63,6 +71,7 @@ export default function App() {
               onQueryChange={setQuery}
               loading={loading}
               error={error}
+              onAddPost={handleAddPost}
               posts={filteredPosts}
             />
           }
